@@ -8,3 +8,4 @@ plugins/
 sonar-project.properties
 releasekey.keystore
 www/.sonar/
+www/js/configOriginal.js

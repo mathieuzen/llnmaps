@@ -4,7 +4,8 @@ var app = angular.module('LLNMaps', ['ngCordova', 'ionic', 'ionic.service.core',
     $ionicPlatform.ready(function () {
         $rootScope.activeLanguage = "EN";
         $ionicAnalytics.register({
-            //dryRun: true
+            //comment this in order to get analytics
+            dryRun: true
         });
         var md = new MobileDetect(window.navigator.userAgent);
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
