@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src: 'self' 'unsafe-inline' 'unsafe-eval'">
+    <title></title>
+
+
+
+    <link rel="stylesheet" href="lib/leaflet/leaflet.css">
+    <script src="lib/leaflet/leaflet.js"></script>
+    <script src="lib/leaflet-plugins/layer/Marker.Rotate.js"></script>
+    <script src="lib/localforage/dist/localforage.js"></script>
+
+
+    <link rel="stylesheet" href="css/leaflet-routing-machine.css">
+    <script src="lib/leaflet-routing-machine.min.js"></script>
+    <script src="lib/lrm-graphhopper-1.1.2.min.js"></script>
+
+    <link rel="stylesheet" href="lib/leaflet.awesome-markers/dist/leaflet.awesome-markers.css">
+    <script src="lib/leaflet.awesome-markers/dist/leaflet.awesome-markers.min.js"></script>
+
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    <link href="css/ionic.app.css" rel="stylesheet">
+    -->
+
+
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <script src="lib/ionic-service-core/ionic-core.js"></script>
+    <script src="lib/ionic-service-analytics/ionic-analytics.js"></script>
+    <script src="lib/ngCordova/dist/ng-cordova.js"></script>
+
+    <!--- plugins -->
+    <script src="lib/insomnia/Insomnia.js"></script>
+    <script src="lib/angular-translate/angular-translate.min.js"></script>
+    <script src="lib/mobile-detect/mobile-detect.min.js"></script>
+
+    <!-- data -->
+    <script src="js/data/auditoriums.js"></script>
+    <script src="js/data/customs.js"></script>
+    <script src="js/data/entertainment.js"></script>
+    <script src="js/data/transport.js"></script>
+    <script src="js/data/shops.js"></script>
+    <script src="js/data/streets.js"></script>
+    <script src="js/data/inforville.js"></script>
+    <script src="js/data/24.js"></script>
+    <script src="js/data/locations.js"></script>
+
+
+    <!-- app -->
+    <script src="js/app.js"></script>
+    <script src="js/config.js"></script>
+
+
+    <!-- translation -->
+    <script src="js/translation/translateProvider.js"></script>
+
+    <!-- services -->
+    <script src="js/services/compute.js"></script>
+    <script src="js/services/routing.js"></script>
+    <script src="js/services/building.js"></script>
+    <script src="js/services/markers.js"></script>
+    <script src="js/services/data.js"></script>
+
+
+    <!-- directives -->
+    <script src="js/directives/category.js"></script>
+    <script src="js/directives/closeMenu.js"></script>
+
+
+    <!-- controllers -->
+    <script src="js/controllers/map.js"></script>
+    <script src="js/controllers/modals.js"></script>
+    <script src="js/controllers/compass.js"></script>
+    <script src="js/controllers/content.js"></script>
+    <script src="js/controllers/tabs.js"></script>
+    <script src="js/controllers/search.js"></script>
+    <script src="js/controllers/delete.js"></script>
+
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
+
+</head>
+
+<body ng-app="LLNMaps">
+
+    <ion-side-menus>
+        <!-- Center content -->
+        <ion-side-menu-content drag-content="false" ng-controller="ContentController">
+
+            <!--          
+
+ | |  | |              | |           | |               
+ | |__| | ___  __ _  __| | ___ _ __  | |__   __ _ _ __ 
+ |  __  |/ _ \/ _` |/ _` |/ _ \ '__| | '_ \ / _` | '__|
+ | |  | |  __/ (_| | (_| |  __/ |    | |_) | (_| | |   
+ |_|  |_|\___|\__,_|\__,_|\___|_|    |_.__/ \__,_|_|   
+                                                       
+                                                       -->
+
+
+            <ion-header-bar style="visibility: visible;" class="bar-positive nav-title-slide-ios7">
+                <div class="divbar">
+                    <button ng-hide="userFocus" style="float: left;" class="button button-head icon ion-pinpoint noborder" ng-click="focus()"></button>
+                    <button ng-controller="ModalsCtrl" id="pin" class="button button-head icon ion-pin noborder" ng-click="pinClick()"></button>
+                    <button id="hideMarkers" class="button button-head icon ion-eye noborder" ng-click="hideAllMarkers()" ng-show="!markersHidden"></button>
+                    <button id="showMarkers" class="button button-head icon ion-eye-disabled noborder" ng-click="showAllMarkers()" ng-show="markersHidden"></button>
+                    <button id="search" menu-toggle="right" class="button button-head icon noborder" ng-class="changeSearchIcon()"></button>
+                    <button ng-controller="ModalsCtrl" id="help" class="button button-head icon ion-help-circled noborder" ng-click="openHelpModal()"></button>
+                    <button id="lang" class="button button-head icon noborder" ng-click="switchLanguage()">{{activeLanguage}}</button>
+
+                    <button id="gps" class="button button-head icon ion-location noborder {{accuracyColor}}" ng-click="geo()"><span ng-hide="gpsActive"><div class="line1"></div><div class="line2"></div></span>
+                    </button>
+                    <button ng-show="directionsServiceActive" id="reset" class="button button-head icon ion-reply noborder" ng-click="resetMap()"></button>
+                </div>
+            </ion-header-bar>
+            <ion-nav-view></ion-nav-view>
+        </ion-side-menu-content>
+
+
+        <!--
+  _____  _       _     _                                
+ |  __ \(_)     | |   | |                               
+ | |__) |_  __ _| |__ | |_   _ __ ___   ___ _ __  _   _ 
+ |  _  /| |/ _` | '_ \| __| | '_ ` _ \ / _ \ '_ \| | | |
+ | | \ \| | (_| | | | | |_  | | | | | |  __/ | | | |_| |
+ |_|  \_\_|\__, |_| |_|\__| |_| |_| |_|\___|_| |_|\__,_|
+            __/ |                                       
+           |___/                                        
+-->
+
+        <ion-side-menu class="searchPanel" ng-controller="SearchCtrl" side="right" expose-aside-when="large">
+            <ion-header-bar class="bar-positive">
+                <div class="divbar">
+                    <label class="item item-input search">
+                        <input class="searchLabel" type="search" ng-focus="showSearch()" placeholder="{{ &apos;search&apos; | translate }}" ng-change="search()" ng-model="data.search">
+                    </label>
+                    <i id="searchIcon" class="icon placeholder-icon" ng-class="icon" ng-click="hideSearch()"></i>
+                </div>
+
+            </ion-header-bar>
+            <ion-content ng-class="fadeInOut" id="results">
+                <ion-list>
+                    <ion-item class="searchItem" ng-click="hideSearch()" href="#/tab/map/{{building.id}}/0" nav-clear="" close-menu="" ng-repeat="building in results">
+                        <div class="info">
+                            <div class="id">{{building.id}}</div>
+                            <div class="name">{{building.name}}</div>
+                            <div class="address">{{building.address}}</div>
+                        </div>
+                        <img class="miniature" ng-src="img/buildings/{{building.id}}.jpg">
+                    </ion-item>
+                    <ion-item class="searchItem" ng-click="hideSearch()" href="#/tab/map/{{street.id}}/0" nav-clear="" close-menu="" ng-repeat="street in streetsResults">
+                        <div class="id">{{street.id}}</div>
+                    </ion-item>
+                </ion-list>
+            </ion-content>
+            <ion-content id="tree">
+                <ion-list>
+                    <building type="auditoriums" title="{{ &apos;auditoria&apos; | translate }}" color="lightblue" icon="university"></building>
+                    <building type="entertainment" title="{{ &apos;entertainment&apos; | translate }}" color="red" icon="happy"></building>
+                    <building type="shops" title="{{ &apos;shopping&apos; | translate }}" color="rose" icon="ios-cart"></building>
+                    <building type="transport" title="{{ &apos;transport&apos; | translate }}" color="orange" icon="android-bus"></building>
+                    <building type="inforville" title="{{ &apos;inforville&apos; | translate }}" color="blue" icon="inforville"></building>
+                    <!--
+TO BE ENABLED FOR 24HEURES LLN
+                    <building type="places24" title="{{ &apos;24H&apos; | translate }}" color="white" icon="ion-android-bicycle"></building>
+-->
+
+                    <div class="item item-divider green" ng-click="showHideCustom()"><i class="icon" ng-class="showCustom ? &apos;ion-minus&apos; : &apos;ion-plus&apos;"></i>&#xA0; {{ &apos;myLocations&apos; | translate }} <i class="ion-home"></i>
+                    </div>
+                    <ion-item ng-controller="DeleteCtrl" class="item-accordion" ng-repeat="customPin in customPins" ng-show="showCustom" on-hold="holdItem()" href="#/tab/map/{{customPin.id}}/0" nav-clear="" close-menu="">
+                        <div class="info">
+                            <div class="id">{{customPin.id}}</div>
+                            <div class="name">{{customPin.name}}</div>
+                            <div class="address">{{customPin.address}}</div>
+                        </div>
+                        <img ng-show="!showDeleteImg" class="miniature" ng-src="img/buildings/{{customPin.id}}.jpg" onerror="this.src=&apos;img/buildings/UNDEFINED.jpg&apos;;">
+                        <button ng-show="showDeleteImg" style="float: right;" class="button button-assertive icon ion-close noborder button-delete" ng-click="delete(customPin.id, $index)"></button>
+                    </ion-item>
+
+                </ion-list>
+            </ion-content>
+        </ion-side-menu>
+    </ion-side-menus>
+
+</body>
+
+
+
+
+</html>

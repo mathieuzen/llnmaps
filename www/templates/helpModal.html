@@ -1,0 +1,97 @@
+<!--
+This is the template for the help modal opened with the corresponding button available on the navigation bar
+-->
+
+<ion-modal-view>
+    <ion-header-bar class="bar-positive">
+        <h1 class="title">{{ 'help' | translate }}</h1>
+        <button class="button button-head icon ion-close noborder" ng-click="closeHelpModal()"></button>
+    </ion-header-bar>
+    <ion-content class="text">
+        <b>Version : {{version}}</b>
+        <p>
+            {{ 'description' | translate }}
+        </p>
+
+        <h3>{{ 'icons' | translate }}</h3>
+        <div class="list">
+            <label class="item item-icon-left">
+                <i class="icon ion-pinpoint"></i>
+                <span class="input-label">{{ 'centerOnUser' | translate }}</span>
+            </label>
+            <label class="item item-icon-left">
+                <i class="icon ion-pin"></i>
+                <span class="input-label">{{ 'createCustomPin' | translate }}</span>
+            </label>
+            <label class="item item-icon-left">
+                <i class="icon ion-eye"></i>
+                <span class="input-label">{{ 'showHideMarkers' | translate }}</span>
+            </label>
+            <label class="item item-icon-left">
+                <i class="icon ion-location"></i>
+                <span class="input-label">{{ 'locationServiceAccuracy' | translate }}</span>
+            </label>
+            <label class="item item-icon-left">
+                <i class="icon ion-help-circled"></i>
+                <span class="input-label">{{ 'helpModal' | translate }}</span>
+            </label>
+            <label class="item item-icon-left">
+                <i class="icon ion-search"></i>
+                <span class="input-label">{{ 'toggleSearchPanel' | translate }}</span>
+            </label>
+        </div>
+
+        <h3>{{ 'views' | translate }}</h3>
+        <div class="list">
+            <label class="item item-icon-left">
+                <i class="icon ion-map"></i>
+                <span class="input-label">{{ 'mapView' | translate }}</span>
+            </label>
+            <label class="item item-icon-left">
+                <i class="icon ion-compass"></i>
+                <span class="input-label">{{ 'compassView' | translate }}</span>
+            </label>
+        </div>
+
+        <h3>{{ 'acknowledgements' | translate }}</h3>
+        <p>{{ 'ackDescription' | translate }}</p>
+        <div class="list">
+            <div class="item">
+                <img class="projectLogo" src="img/ionic.png" />
+                <span class="input-label">Ionic</span>
+                <a onclick="window.open('http://ionicframework.com/', '_system', 'location=yes'); return false;" class="url">http://ionicframework.com/</a>
+            </div>
+            <div class="item">
+                <img class="projectLogo" src="img/leaflet.png" />
+                <span class="input-label">Leaflet</span>
+                <a onclick="window.open('http://leafletjs.com/', '_system', 'location=yes'); return false;" class="url">http://leafletjs.com/</a>
+            </div>
+            <div class="item">
+                <img class="projectLogo" src="img/osm.png" />
+                <span class="input-label">OpenStreetMap</span>
+                <a onclick="window.open('http://www.openstreetmaps.org/', '_system', 'location=yes'); return false;" class="url">http://www.openstreetmaps.org/</a>
+            </div>
+            <div class="item">
+                <img class="projectLogo" src="img/lrm.png" />
+                <span class="input-label">Leaflet Routing Machine</span>
+                <a onclick="window.open('http://www.liedman.net/leaflet-routing-machine/', '_system', 'location=yes'); return false;" class="url">http://www.liedman.net/leaflet-routing-machine/</a>
+            </div>
+            <div class="item">
+                <img class="projectLogo" src="img/osrm.png" />
+                <span class="input-label">OSRM</span>
+                <a onclick="window.open('http://project-osrm.org/', '_system', 'location=yes'); return false;" class="url">http://project-osrm.org/</a>
+            </div>
+            <div class="item">
+                <img class="projectLogo" src="img/mapzen.png" />
+                <span class="input-label">Mapzen</span>
+                <a onclick="window.open('https://mapzen.com/', '_system', 'location=yes'); return false;" class="url">https://mapzen.com/</a>
+            </div>
+        </div>
+
+        <div class="copyright">
+            Copyright © 2015 by Mathieu Zen
+        </div>
+
+
+    </ion-content>
+</ion-modal-view>

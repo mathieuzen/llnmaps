@@ -1,0 +1,577 @@
+angular.module('starter.controllers', [])
+
+.controller('MapCtrl', function($scope, $ionicLoading) {
+
+function initialize() {
+
+  var image = 'img/books.png';
+
+
+    var mapOptions = {
+      center: new google.maps.LatLng(50.668611,4.612948),
+      zoom: 17,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    var map = new google.maps.Map(document.getElementById("map"),
+        mapOptions);
+
+    $scope.map = map;
+
+   	var agor = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.668940, 4.611550),
+   	map: map,
+    	title:"AGOR",
+	icon: image
+	});
+
+   	var barb = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.668178, 4.621446),
+   	map: map,
+    	title:"BARB",
+	icon: image,
+	labelContent: "BARB"
+	});
+
+   	var core = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.668834, 4.615409),
+   	map: map,
+    	title:"CORE",
+	icon: image
+	});
+	
+   	var coub = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.670538, 4.606796),
+   	map: map,
+    	title:"COUB",
+	icon: image
+	});
+	
+   	var cycl = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.666175, 4.623584),
+   	map: map,
+    	title:"CYCL",
+	icon: image
+	});
+	
+   	var desc = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.669444, 4.611214),
+   	map: map,
+    	title:"DESC",
+	icon: image
+	});
+	
+   	var dupr = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.668130, 4.611366),
+   	map: map,
+    	title:"DUPR",
+	icon: image
+	});
+	
+   	var doye = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.668329, 4.612420),
+   	map: map,
+    	title:"DOYE",
+	icon: image
+	});
+	
+   	var eras = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.669618, 4.610401),
+   	map: map,
+    	title:"ERAS",
+	icon: image
+	});
+	
+   	var esop = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.669070, 4.614903),
+   	map: map,
+    	title:"ESOP",
+	icon: image
+	});
+	
+   	var lavo = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.669184, 4.619182),
+   	map: map,
+    	title:"LAVO",
+	icon: image
+	});
+	
+   	var lecl = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.668006, 4.611857),
+   	map: map,
+    	title:"LECL",
+	icon: image
+	});
+	
+   	var mcur = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.667736, 4.620695),
+   	map: map,
+    	title:"MCUR",
+	icon: image
+	});
+
+   	var merc = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.669249, 4.619493),
+   	map: map,
+    	title:"MERC",
+	icon: image
+	});
+	
+   	var mont = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.668462, 4.611519),
+   	map: map,
+    	title:"MONT",
+	icon: image
+	});
+	
+   	var more = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.668018, 4.611323),
+   	map: map,
+    	title:"MORE",
+	icon: image
+	});
+	
+   	var pcur = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.668091, 4.620550),
+   	map: map,
+    	title:"PCUR",
+	icon: image
+	});
+	
+   	var sces = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.668282, 4.619510),
+   	map: map,
+    	title:"SCES",
+	icon: image
+	});
+	
+   	var socr = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.670164, 4.610792),
+   	map: map,
+    	title:"SOCR",
+	icon: image
+	});
+	
+   	var stud = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.669227, 4.612270),
+   	map: map,
+    	title:"STUD",
+	icon: image
+	});
+	
+   	var sud = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.667010, 4.620630),
+   	map: map,
+    	title:"SUD",
+	icon: image
+	});
+	
+   	var vhel = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.669450, 4.619263),
+   	map: map,
+    	title:"VHEL",
+	icon: image
+	});
+  }
+google.maps.event.addDomListener(window, 'load', initialize);  initialize();
+
+})
+
+.controller('MarkerCtrl', function($scope, $stateParams) {
+function initialize() {
+
+  var image = 'img/books.png';
+
+
+    var mapOptions = {
+      center: new google.maps.LatLng(50.668611,4.612948),
+      zoom: 17,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    var map = new google.maps.Map(document.getElementById("map"),
+        mapOptions);
+
+    $scope.map = map;
+
+   	var agor = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.668940,4.611550),
+   	map: map,
+    	title:"AGOR",
+	icon: image,
+	labelContent: "AGOR"
+	});
+	
+   	var barb = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.668178, 4.621446),
+   	map: map,
+    	title:"BARB",
+	icon: image,
+	labelContent: "BARB"
+	});
+
+   	var core = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.668834, 4.615409),
+   	map: map,
+    	title:"CORE",
+	icon: image,
+	labelContent: "CORE"
+	});
+	
+   	var coub = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.670538, 4.606796),
+   	map: map,
+    	title:"COUB",
+	icon: image,
+	labelContent: "COUB"
+	});
+	
+   	var cycl = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.666175, 4.623584),
+   	map: map,
+    	title:"CYCL",
+	icon: image,
+	labelContent: "CYCL"
+	});
+	
+   	var desc = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.669444, 4.611214),
+   	map: map,
+    	title:"DESC",
+	icon: image,
+	labelContent: "DESC"
+	});
+	
+   	var dupr = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.668130, 4.611366),
+   	map: map,
+    	title:"DUPR",
+	icon: image,
+	labelContent: "DUPR"
+	});
+	
+   	var doye = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.668329, 4.612420),
+   	map: map,
+    	title:"DOYE",
+	icon: image,
+	labelContent: "DOYE"
+	});
+	
+   	var eras = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.669618, 4.610401),
+   	map: map,
+    	title:"ERAS",
+	icon: image,
+	labelContent: "ERAS"
+	});
+	
+   	var esop = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.669070, 4.614903),
+   	map: map,
+    	title:"ESOP",
+	icon: image,
+	labelContent: "ESOP"
+	});
+	
+   	var lavo = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.669184, 4.619182),
+   	map: map,
+    	title:"LAVO",
+	icon: image,
+	labelContent: "LAVO"
+	});
+	
+   	var lecl = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.668006, 4.611857),
+   	map: map,
+    	title:"LECL",
+	icon: image,
+	labelContent: "LECL"
+	});
+	
+   	var mcur = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.667736, 4.620695),
+   	map: map,
+    	title:"MCUR",
+	icon: image,
+	labelContent: "MCUR"
+	});
+
+   	var merc = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.669249, 4.619493),
+   	map: map,
+    	title:"MERC",
+	icon: image,
+	labelContent: "MERC"
+	});
+	
+   	var mont = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.668462, 4.611519),
+   	map: map,
+    	title:"MONT",
+	icon: image,
+	labelContent: "MONT"
+	});
+	
+   	var more = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.668018, 4.611323),
+   	map: map,
+    	title:"MORE",
+	icon: image,
+	labelContent: "MORE"
+	});
+	
+   	var pcur = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.668091, 4.620550),
+   	map: map,
+    	title:"PCUR",
+	icon: image,
+	labelContent: "PCUR"
+	});
+	
+   	var sces = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.668282, 4.619510),
+   	map: map,
+    	title:"SCES",
+	icon: image,
+	labelContent: "SCES"
+	});
+	
+   	var socr = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.670164, 4.610792),
+   	map: map,
+    	title:"SOCR",
+	icon: image,
+	labelContent: "SOCR"
+	});
+	
+   	var stud = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.669227, 4.612270),
+   	map: map,
+    	title:"STUD",
+	icon: image,
+	labelContent: "STUD"
+	});
+	
+   	var sud = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.667010, 4.620630),
+   	map: map,
+    	title:"SUD",
+	icon: image,
+	labelContent: "SUD"
+	});
+	
+   	var vhel = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.669450, 4.619263),
+   	map: map,
+    	title:"VHEL",
+	icon: image,
+	labelContent: "VHEL"
+	});
+
+   	var merc = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.669249, 4.619493),
+   	map: map,
+    	title:"MERC",
+	icon: image,
+	labelContent: "MERC"
+	});
+	
+   	var mont = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.668462, 4.611519),
+   	map: map,
+    	title:"MONT",
+	icon: image,
+	labelContent: "MONT"
+	});
+	
+   	var more = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.668018, 4.611323),
+   	map: map,
+    	title:"MORE",
+	icon: image,
+	labelContent: "MORE"
+	});
+	
+   	var pcur = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.668091, 4.620550),
+   	map: map,
+    	title:"PCUR",
+	icon: image,
+	labelContent: "PCUR"
+	});
+	
+   	var sces = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.668282, 4.619510),
+   	map: map,
+    	title:"SCES",
+	icon: image,
+	labelContent: "SCES"
+	});
+	
+   	var socr = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.670164, 4.610792),
+   	map: map,
+    	title:"SOCR",
+	icon: image,
+	labelContent: "SOCR"
+	});
+	
+   	var stud = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.669227, 4.612270),
+   	map: map,
+    	title:"STUD",
+	icon: image,
+	labelContent: "STUD"
+	});
+	
+   	var sud = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.667010, 4.620630),
+   	map: map,
+    	title:"SUD",
+	icon: image,
+	labelContent: "SUD"
+	});
+	
+   	var vhel = new google.maps.Marker({
+    	position: new google.maps.LatLng(50.669450, 4.619263),
+   	map: map,
+    	title:"VHEL",
+	icon: image,
+	labelContent: "VHEL"
+	});
+
+	///
+
+	if($stateParams.id=="AGOR"){
+	map.setZoom(18);
+	map.setCenter(agor.position);
+	}
+	
+	if($stateParams.id=="BARB"){
+	map.setZoom(18);
+	map.setCenter(barb.position);
+	}
+	
+	if($stateParams.id=="CORE"){
+	map.setZoom(18);
+	map.setCenter(core.position);
+	}
+	
+	if($stateParams.id=="COUB"){
+	map.setZoom(18);
+	map.setCenter(coub.position);
+	}
+	
+	if($stateParams.id=="CYCL"){
+	map.setZoom(18);
+	map.setCenter(cycl.position);
+	}
+	
+	if($stateParams.id=="DESC"){
+	map.setZoom(18);
+	map.setCenter(desc.position);
+	}
+	
+	if($stateParams.id=="DUPR"){
+	map.setZoom(18);
+	map.setCenter(dupr.position);
+	}
+	
+	if($stateParams.id=="DOYE"){
+	map.setZoom(18);
+	map.setCenter(doye.position);
+	}
+	
+	if($stateParams.id=="ERAS"){
+	map.setZoom(18);
+	map.setCenter(eras.position);
+	}
+	
+	if($stateParams.id=="ESOP"){
+	map.setZoom(18);
+	map.setCenter(esop.position);
+	}
+	
+	if($stateParams.id=="LAVO"){
+	map.setZoom(18);
+	map.setCenter(lavo.position);
+	}
+
+	if($stateParams.id=="LECL"){
+	map.setZoom(18);
+	map.setCenter(lecl.position);
+	}
+	
+	if($stateParams.id=="MCUR"){
+	map.setZoom(18);
+	map.setCenter(mcur.position);
+	}
+
+	if($stateParams.id=="MERC"){
+	map.setZoom(18);
+	map.setCenter(merc.position);
+	}
+	
+	if($stateParams.id=="MONT"){
+	map.setZoom(18);
+	map.setCenter(mont.position);
+	}
+	
+	if($stateParams.id=="MORE"){
+	map.setZoom(18);
+	map.setCenter(more.position);
+	}
+
+	
+	if($stateParams.id=="PCUR"){
+	map.setZoom(18);
+	map.setCenter(pcur.position);
+	}
+	
+	if($stateParams.id=="SCES"){
+	map.setZoom(18);
+	map.setCenter(sces.position);
+	}
+	
+	if($stateParams.id=="SOCR"){
+	map.setZoom(18);
+	map.setCenter(socr.position);
+	}
+	
+	if($stateParams.id=="STUD"){
+	map.setZoom(18);
+	map.setCenter(stud.position);
+	}
+	
+	if($stateParams.id=="SUD"){
+	map.setZoom(18);
+	map.setCenter(sud.position);
+	}
+	
+	if($stateParams.id=="VHEL"){
+	map.setZoom(18);
+	map.setCenter(vhel.position);
+	}
+
+	if($stateParams.id=="GLOBAL"){
+	map.setZoom(17);
+	map.setCenter(new google.maps.LatLng(50.669014, 4.614022));
+	}
+  }
+google.maps.event.addDomListener(window, 'load', initialize);  initialize();
+
+})
+
+.controller('ListCtrl', function($scope) {
+
+  $scope.items = ["AGOR","BARB","CORE","COUB","CYCL", 
+                  "DESC", "DUPR", "DOYE", "ERAS", "ESOP", 
+				  "LAVO", "LECL", "MCUR", "MERC", "MONT", 
+				  "MORE","PCUR", "SCES", "SOCR", "STUD", "SUD", "VHEL"];
+})
+
+.controller('SettingsCtrl', function($scope) {
+});
+

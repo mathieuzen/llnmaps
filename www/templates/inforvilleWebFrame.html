@@ -1,0 +1,13 @@
+<!--
+This is the template for the webframe opening the inforville website with the corresponding id which provide details about the location
+-->
+
+<ion-modal-view>
+    <ion-header-bar class="bar green-info">
+        <h1 class="title">{{ 'Info' | translate }}</h1>
+        <button class="button button-head icon ion-close noborder green-info" ng-click="closeWebFrame()"></button>
+    </ion-header-bar>
+    <ion-content style="overflow:auto;-webkit-overflow-scrolling:touch">
+        <iframe scrolling="yes" class="croppedFrame" ng-src="{{getWebFrameSrc()}}" ></iframe>
+    </ion-content>
+</ion-modal-view>

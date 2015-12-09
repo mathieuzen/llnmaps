@@ -1,0 +1,12 @@
+<!--
+This is the template for the tabs displayed at the bottom of the app
+-->
+
+<ion-tabs class="tabs-icon-top tabs-positive tabs-striped tabs-background-positive tabs-color-light" ng-class="tabTransition">
+    <ion-tab title="{{ 'map' | translate }}" icon="ion-map" icon-off="ion-map" ng-click="toMap();">
+        <ion-nav-view name="map"></ion-nav-view>
+    </ion-tab>
+    <ion-tab title="{{ 'compass' | translate }}" icon="ion-compass" icon-off="ion-compass" href="#/tab/compass" ng-click="toCompass();">
+        <ion-nav-view name="compass" ></ion-nav-view>
+    </ion-tab>
+</ion-tabs>

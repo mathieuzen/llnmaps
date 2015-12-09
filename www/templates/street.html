@@ -1,0 +1,8 @@
+<!--
+This is the template corresponding to the street items, we've chosen to disable this functionality as a list of streets is too big to be easily used
+-->
+
+<div class="item item-divider {{color}}" ng-click="showHideBuilding()"><i class="icon" ng-class="showBuilding ? &apos;ion-minus&apos; : &apos;ion-plus&apos;"></i>&#xA0; {{title}} <i class="ion-{{icon}} icon-ion-{{icon}}"></i><i class="visibility ion-eye" ng-show="markersVisible" ng-click="hideMarkers($event, icon)"></i><i class="visibility ion-eye-disabled" ng-show="!markersVisible" ng-click="showMarkers($event, icon)"></i></div>
+    <ion-item class="item-accordion street-item" ng-repeat="building in buildings" href="#/tab/map/{{building.id}}/0" nav-clear="" close-menu ng-show="showBuilding">
+            <div class="id">{{building.id}}</div>
+</ion-item>
