@@ -524,6 +524,10 @@ back {
 
 .visibility {
     float: right;
+    font-size: 18px;
+    width: 30px;
+    text-align: center;
+    margin-right: -5px;
 }
 
 @font-face {
@@ -572,6 +576,13 @@ back {
 .time {
     color: black !important;
     min-width: 90px;
+    background-color: white !important;
+}
+
+.time-full {
+    color: black !important;
+    width: 100%;
+    background-color: white !important;
 }
 
 .green-info {
@@ -605,3 +616,62 @@ back {
     float: right;
     font-weight: 800;
 }
+
+.popup-inforville .leaflet-popup-content-wrapper{
+        background: -webkit-linear-gradient(top, #0065A0, #0065A0 10%, white 70%, white 100%);
+        background: linear-gradient(top, #0065A0, #0065A0 10%, white 70%, white 100%);
+}
+
+.popup-transport .leaflet-popup-content-wrapper{
+    background: -webkit-linear-gradient(top, orange, orange 10%, white 70%, white 100%);
+        background: linear-gradient(top, orange, orange 10%, white 70%, white 100%);
+}
+
+.popup-shops .leaflet-popup-content-wrapper{
+    background: -webkit-linear-gradient(top, #d208b7, #d208b7 10%, white 70%, white 100%);
+        background: linear-gradient(top, #d208b7, #d208b7 10%, white 70%, white 100%);
+}
+
+.popup-entertainment .leaflet-popup-content-wrapper{
+    background: -webkit-linear-gradient(top, #d62e0F, #d62e0F 10%, white 70%, white 100%);
+        background: linear-gradient(top, #d62e0F, #d62e0F 10%, white 70%, white 100%);}
+
+.popup-audit .leaflet-popup-content-wrapper{
+    background: -webkit-linear-gradient(top, #2db2ff, #2db2ff 10%, white 70%, white 100%);
+        background: linear-gradient(top, #2db2ff, #2db2ff 10%, white 70%, white 100%);}
+
+.popup-custom .leaflet-popup-content-wrapper{
+    background: -webkit-linear-gradient(top, #4cc600, #4cc600 10%, white 70%, white 100%);
+        background: linear-gradient(top, #4cc600, #4cc600 10%, white 70%, white 100%);}
+
+.popup-streets .leaflet-popup-content-wrapper{
+    background: -webkit-linear-gradient(top, black, black 10%, white 70%, white 100%);
+        background: linear-gradient(top, black, black 10%, white 70%, white 100%);
+color: white;
+    text-align: left !important;
+}
+
+.custom-popup .leaflet-popup-close-button{
+    color: white !important;
+    font-weight: bolder !important;
+    font-size: 30px !important;
+    top: 14px !important;
+    right: 20px !important;
+}
+
+.custom-popup .popupID{
+    font-weight: bolder;
+    color: white;
+}
+
+.custom-popup .leaflet-popup-content-wrapper {
+    border-radius: 0;
+  }
+.custom-popup .leaflet-popup-content-wrapper a {
+  }
+.custom-popup .leaflet-popup-tip-container {
+
+  }
+.custom-popup .leaflet-popup-tip {
+
+  }

@@ -210,7 +210,7 @@ angular.module('LLNMaps.map', ['ionic'])
         }
 
         spanTime = document.createElement("span");
-        spanTime.className = "button button-outline button-positive button-small time";
+        spanTime.className = "button button-outline button-positive button-small time-full";
         spanTime.id = "time";
         spanTime.innerHTML = "<i style='font-size:20px;color: #0c63ee !important;' class='ion-android-walk'></i> ";
 
@@ -222,15 +222,16 @@ angular.module('LLNMaps.map', ['ionic'])
                 '<p style="word-wrap: break-word;">' + name + '</p>' +
                 '<p>' + address + '</p>';
         } else if (type == "streets") {
-            div.innerHTML = '<p style="width: 100px; text-align:center; word-wrap: break-word;">' + id + '</p>';
+            div.innerHTML = '<p style="width: 80px; text-align:left; word-wrap: break-word;">' + id + '</p>';
         } else {
-            div.innerHTML = '<p>' + id + '</p>' + findImage(id) +
+            div.innerHTML = '<p class="popupID">' + id + '</p>' + findImage(id) +
                 '<p style="word-wrap: break-word;">' + name + '</p>' +
                 '<p>' + address + '</p>';
         }
         div.appendChild(spanTime);
 
         if (typeof info != 'undefined') {
+            spanTime.className = "button button-outline button-positive button-small time";
             infoNode = document.createElement("a");
             infoNode.className = "button button-positive button-small infoButton";
             infoNode.innerHTML = "<i style='font-size:20px;'class='icon-ion-inforville'></i> " + $translate.instant('moreInfo');
@@ -252,8 +253,11 @@ angular.module('LLNMaps.map', ['ionic'])
         }
 
         div.appendChild(button);
-
-        $scope.marker.bindPopup(div);
+        
+        var popup = new L.popup({className: "custom-popup popup-"+type, keepInView: true});
+        popup.setContent(div);
+        
+        $scope.marker.bindPopup(popup);
 
         $scope.marker.on('click', function () {
             this.openPopup();
