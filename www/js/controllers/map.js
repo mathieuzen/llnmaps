@@ -31,8 +31,8 @@ angular.module('LLNMaps.map', ['ionic'])
         opacity: '0.2'
     });
     
-    $rootScope.skip = function(){
-        $ionicLoading.hide();   
+    $rootScope.skip = function () {
+        $ionicLoading.hide();
     }
 
     $rootScope.focus = function () {
@@ -107,9 +107,21 @@ angular.module('LLNMaps.map', ['ionic'])
         $rootScope.map.on('dragstart', function (e) {
             $scope.releaseFocus();
         });
-        
+
+        $rootScope.map.on('zoomend', function (e) {
+            if ($rootScope.map.getZoom() <= 15) {
+                $rootScope.hideAllMarkers();
+            } else {
+                $rootScope.showAllMarkers();
+            }
+            $timeout(function () {
+                $rootScope.map.fireEvent('click');
+            }, 50, true);
+        });
+
         $rootScope.map.addLayer($rootScope.polyline);
         
+        $scope.plotArea();
     }
 
     $rootScope.pinClick = function () {
@@ -143,12 +155,12 @@ angular.module('LLNMaps.map', ['ionic'])
 
         plotUser($rootScope.userPosition);
         centerOn(user);
-        
+
         $rootScope.directionsServiceActive = false;
-        
+
         $rootScope.polyline.setLatLngs([]);
         $rootScope.map.addLayer($rootScope.polyline);
-        
+
         $rootScope.go = 0;
         $rootScope.id = "GLOBAL";
         location = "#/tab/map/";
@@ -253,10 +265,13 @@ angular.module('LLNMaps.map', ['ionic'])
         }
 
         div.appendChild(button);
-        
-        var popup = new L.popup({className: "custom-popup popup-"+type, keepInView: true});
+
+        var popup = new L.popup({
+            className: "custom-popup popup-" + type,
+            keepInView: true
+        });
         popup.setContent(div);
-        
+
         $scope.marker.bindPopup(popup);
 
         $scope.marker.on('click', function () {
@@ -271,6 +286,10 @@ angular.module('LLNMaps.map', ['ionic'])
         });
 
         $scope.marker.id = id;
+        
+        $scope.marker._icon.className += " marker";
+        $scope.marker._shadow.className += " marker";
+
 
         return $scope.marker;
     }
@@ -287,6 +306,15 @@ angular.module('LLNMaps.map', ['ionic'])
 
     function plotUser(position) {
         user = new L.Marker(position).setIcon(userIcon).addTo($rootScope.map);
+    }
+    
+    $scope.plotArea = function(){
+        for(a in areas){
+            var area = areas[a];
+            areaPolygon = new L.polygon(area.coordinates, {color:'red'});
+            areaPolygon.bindLabel("Test",{noHide: true});
+            $rootScope.map.addLayer(areaPolygon);
+        }
     }
 
     function centerOn(marker) {
@@ -600,7 +628,6 @@ angular.module('LLNMaps.map', ['ionic'])
     //Main
     getMap();
 
-
     if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
         document.addEventListener("deviceready", onDeviceReady, false);
     } else {
@@ -617,6 +644,7 @@ angular.module('LLNMaps.map', ['ionic'])
         go = path.split("/")[4];
         for (i in $rootScope.markers) {
             $scope.marker = $rootScope.markers[i];
+            $rootScope.activeMarker = $scope.marker;
             if (id == $scope.marker.id) {
                 break;
             } else {
