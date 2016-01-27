@@ -8,7 +8,7 @@ This is the template for the help modal opened with the corresponding button ava
         <button class="button button-head icon ion-close noborder" ng-click="closeHelpModal()"></button>
     </ion-header-bar>
     <ion-content class="text">
-        <b>Version : {{version}}</b>
+        <b>Version : {{::version}}</b>
         <p>
             {{ 'description' | translate }}
         </p>

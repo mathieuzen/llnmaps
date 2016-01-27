@@ -28,8 +28,8 @@ app.directive("building", function ($rootScope, $ionicSideMenuDelegate, $ionicAn
             scope.hideMarkers = function (e, icon) {
                 e.stopPropagation();
                 for (marker in $rootScope.markers) {
-                        m = $rootScope.markers[marker];
-                        if (m != $rootScope.activeMarker) {
+                    m = $rootScope.markers[marker];
+                    if (m != $rootScope.activeMarker) {
                         if (m._icon.innerHTML.indexOf(icon) > -1 && m != $rootScope.activeMarker) {
                             m._icon.style.display = "none";
                             m._shadow.style.display = "none";
@@ -43,11 +43,9 @@ app.directive("building", function ($rootScope, $ionicSideMenuDelegate, $ionicAn
                 e.stopPropagation();
                 for (marker in $rootScope.markers) {
                     m = $rootScope.markers[marker];
-                    if (m != $rootScope.activeMarker) {
-                        if (m._icon.innerHTML.indexOf(icon) > -1) {
-                            m._icon.style.display = "";
-                            m._shadow.style.display = "";
-                        }
+                    if (m._icon.innerHTML.indexOf(icon) > -1) {
+                        m._icon.style.display = "";
+                        m._shadow.style.display = "";
                     }
                 }
                 scope.markersVisible = true;
@@ -61,6 +59,11 @@ app.directive("building", function ($rootScope, $ionicSideMenuDelegate, $ionicAn
                         if (m._icon.innerHTML.indexOf(icon) > -1) {
                             m._icon.style.opacity = opacity;
                             m._shadow.style.opacity = opacity;
+                        }
+                    } else {
+                        if (m._icon.innerHTML.indexOf(icon) > -1) {
+                            m._icon.style.opacity = 1;
+                            m._shadow.style.opacity = 1;
                         }
                     }
                 }

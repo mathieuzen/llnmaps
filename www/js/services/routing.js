@@ -48,7 +48,7 @@ angular.module('LLNMaps')
             }
 
             $rootScope.routeCalc.on("routesfound", function (e) {
-                estimatedTime = e.routes[0].summary.totalTime;
+                var estimatedTime = e.routes[0].summary.totalTime;
                 var min = Math.floor(estimatedTime / 60);
                 var sec = Math.floor(estimatedTime % 60);
                 $rootScope.time = " " + min + " min " + sec + " sec";

@@ -9,7 +9,7 @@ This is the template for the compass view
             
                 <div id="towards" ng-click="cardClick()" ng-class="animate" style="display: table; text-align:center; font-size: 20px;">
         <div id="compassItem" class="item item-text-wrap" style="display: table-cell; vertical-align: middle; height: 100%;">
-            <p>{{building}}</p>
+            <p>{{::building}}</p>
             <img style="max-height:80%; width: 100%; position: absolute; left:0; right: 0; bottom:0;" src="img/buildings/{{id}}.jpg" />
         </div>
     </div>
@@ -17,7 +17,7 @@ This is the template for the compass view
             <img id="circleCompass" src="img/circleCompass.png" />
             <img id="arrowCompass" style="position: absolute; top:0; bottom: 0; right:0; left: 0; margin: auto;" src="img/arrowBig.png" />
             <div id="distance">
-                <div id="compassItem" class="item item-text-wrap">{{dist}}
+                <div id="compassItem" class="item item-text-wrap">{{::dist}}
                 </div>
             </div>
         </div>

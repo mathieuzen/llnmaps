@@ -21,10 +21,12 @@ var app = angular.module('LLNMaps', ['ngCordova', 'ionic', 'ionic.service.core',
             navigator.splashscreen.hide();
         }
 
-        if (md.tablet() != null) {
-            screen.lockOrientation("landscape");
-        } else {
-            screen.lockOrientation("portrait");
+        if (md.tablet() && md.phone()) {
+            if (md.tablet() != null) {
+                screen.lockOrientation("landscape");
+            } else {
+                screen.lockOrientation("portrait");
+            }
         }
 
         if (typeof navigator.globalization !== "undefined") {

@@ -1,5 +1,5 @@
     
-    var version = "beta 0.1.3";
+    var version = "beta 0.1.4";
 
     //bounds to map
     var northWestBound = [50.687210, 4.580998];
@@ -16,10 +16,11 @@
     });
 
     //server url for routing machine 
-    var defaultURLServer = "http://osrm.mapzen.com/foot/viaroute";
+    var defaultURLServer = "http://zensites.no-ip.biz:5000/viaroute";
     var priorURLServer = "http://zensites.no-ip.biz:5000/viaroute";
 
     //graphhopper enabled
-    var graphhopperActive = true;
+    var graphhopperActive = false;
     var graphhopperKey = "YOUR_API_KEY";
+    
     

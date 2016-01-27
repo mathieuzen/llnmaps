@@ -31,7 +31,8 @@
     },
     "https://github.com/EddyVerbruggen/Insomnia-PhoneGap-Plugin.git",
     "git://github.com/zoxxx/PhoneGap-KeepScreenOn-plugin.git",
-    "https://git-wip-us.apache.org/repos/asf/cordova-plugin-globalization.git"
+    "https://git-wip-us.apache.org/repos/asf/cordova-plugin-globalization.git",
+    "cordova-plugin-crosswalk-webview"
   ],
   "cordovaPlatforms": [
     "ios",

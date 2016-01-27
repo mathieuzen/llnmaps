@@ -1,6 +1,6 @@
 angular.module('LLNMaps.map', ['ionic'])
 
-.controller('MapCtrl', function ($scope, $http, $rootScope, $stateParams, $location, $ionicLoading, $ionicPopup, $ionicPlatform, $ionicActionSheet, $cordovaDeviceOrientation, $timeout, $ionicModal, compute, routing, $translate, $ionicAnalytics) {
+.controller('MapCtrl', function ($scope, $http, $rootScope, $stateParams, $location, $ionicLoading, $ionicPopup, $ionicPlatform, $ionicActionSheet, $cordovaDeviceOrientation, $timeout, $ionicModal, compute, routing, geolocation, $translate, $ionicAnalytics) {
 
     //markers for buildings
     $rootScope.markers = new Array();
@@ -21,6 +21,8 @@ angular.module('LLNMaps.map', ['ionic'])
     var compass;
     var lastLocationForBearing;
 
+    $scope.labels = [];
+
     $rootScope.go = 0;
 
     //focus on user
@@ -30,14 +32,16 @@ angular.module('LLNMaps.map', ['ionic'])
         color: 'green',
         opacity: '0.2'
     });
-    
+
+    $rootScope.gpsAlertShowed = false;
+
     $rootScope.skip = function () {
         $ionicLoading.hide();
     }
 
     $rootScope.focus = function () {
         centerOn(user);
-        scope.userFocus = true;
+        $scope.userFocus = true;
         $scope.marker.closePopup();
     };
 
@@ -74,7 +78,7 @@ angular.module('LLNMaps.map', ['ionic'])
             zoomControl: false,
             //hide attributions to prevent not intent event
             attributionControl: false
-        }).setView(station.getLatLng(), 17);
+        }).setView(station.getLatLng(), 14);
 
         L.tileLayer('img/tiles/{z}/{x}/{y}.jpg', {
             attribution: '<span>&copy; <a href="http://osm.org/copyright">OpenStreetMap</a></span>',
@@ -87,11 +91,14 @@ angular.module('LLNMaps.map', ['ionic'])
         $rootScope.map.setMaxBounds(new L.LatLngBounds(northWestBound, southEastBound));
 
         $rootScope.map.on('popupopen', function (e) {
-            var px = $rootScope.map.project(e.popup._latlng); // find the pixel location on the 
-            px.y -= e.popup._container.clientHeight / 2 // find the height of the 
-            $rootScope.map.panTo($rootScope.map.unproject(px), {
-                animate: true
-            }); // pan to new center
+            $rootScope.map.setZoomAround(e.popup._latlng, 17);
+            $timeout(function () {
+                var px = $rootScope.map.project(e.popup._latlng); // find the pixel location on the 
+                px.y -= e.popup._container.clientHeight / 2 // find the height of the 
+                $rootScope.map.panTo($rootScope.map.unproject(px), {
+                    animate: true
+                }); // pan to new center
+            }, 500);
         });
 
         $rootScope.map.doubleClickZoom.disable();
@@ -109,10 +116,16 @@ angular.module('LLNMaps.map', ['ionic'])
         });
 
         $rootScope.map.on('zoomend', function (e) {
-            if ($rootScope.map.getZoom() <= 15) {
+            if ($rootScope.map.getZoom() <= 14) {
                 $rootScope.hideAllMarkers();
             } else {
                 $rootScope.showAllMarkers();
+            }
+            for (label in $scope.labels) {
+                if ($rootScope.map.getZoom() < 14)
+                    $scope.map.removeLayer($scope.labels[label]);
+                else
+                    $scope.map.addLayer($scope.labels[label]);
             }
             $timeout(function () {
                 $rootScope.map.fireEvent('click');
@@ -120,7 +133,7 @@ angular.module('LLNMaps.map', ['ionic'])
         });
 
         $rootScope.map.addLayer($rootScope.polyline);
-        
+
         $scope.plotArea();
     }
 
@@ -165,7 +178,7 @@ angular.module('LLNMaps.map', ['ionic'])
         $rootScope.id = "GLOBAL";
         location = "#/tab/map/";
     }
-
+    
     $rootScope.newPin = function (pos) {
         if (pos == undefined) {
             pos = $rootScope.userPosition;
@@ -272,7 +285,9 @@ angular.module('LLNMaps.map', ['ionic'])
         });
         popup.setContent(div);
 
-        $scope.marker.bindPopup(popup);
+        $scope.marker.bindPopup(popup, {
+            keepInView: false
+        });
 
         $scope.marker.on('click', function () {
             this.openPopup();
@@ -286,7 +301,7 @@ angular.module('LLNMaps.map', ['ionic'])
         });
 
         $scope.marker.id = id;
-        
+
         $scope.marker._icon.className += " marker";
         $scope.marker._shadow.className += " marker";
 
@@ -307,13 +322,23 @@ angular.module('LLNMaps.map', ['ionic'])
     function plotUser(position) {
         user = new L.Marker(position).setIcon(userIcon).addTo($rootScope.map);
     }
-    
-    $scope.plotArea = function(){
-        for(a in areas){
+
+    $scope.plotArea = function () {
+        for (a in areas) {
             var area = areas[a];
-            areaPolygon = new L.polygon(area.coordinates, {color:'red'});
-            areaPolygon.bindLabel("Test",{noHide: true});
+            areaPolygon = new L.polygon(area.coordinates, {
+                color: area.color,
+                stroke: false,
+                fillOpacity: 0.1,
+                clickable: false
+            });
+            label = new L.Label();
+            label.setContent(area.id);
+            label.setLatLng(areaPolygon.getBounds().getCenter());
             $rootScope.map.addLayer(areaPolygon);
+            $rootScope.map.showLabel(label);
+            label.setOpacity(0.7);
+            $scope.labels.push(label);
         }
     }
 
@@ -339,65 +364,48 @@ angular.module('LLNMaps.map', ['ionic'])
         $rootScope.map.panTo(popup.getLatLng(), {
             animate: true
         });
+
     }
 
     function getLocation() {
-        if ($rootScope.userPosition == undefined) {
-            $scope.loading = $ionicLoading.show({
-                template: "<ion-spinner class='spinner-light' icon='circles'></ion-spinner><p style='padding-top:10px'>{{ 'loadingMsg' | translate }}</p><button class='button button-block button-outline button-stable' ng-click='skip()'>{{'hide'|translate}}</button>",
+        geolocation.position().then(function (position) {
+                var latLngPosition = L.latLng(position.coords.latitude, position.coords.longitude);
+                plotUser(latLngPosition);
+                watchPosition();
+                if (isInLLN([position.coords.latitude, position.coords.longitude])) {
+                    centerOn(user);
+                    $rootScope.userPosition = latLngPosition;
+                    lastLocationForBearing = $rootScope.userPosition;
+                } else {
+                    $ionicAnalytics.track('outOfLLN', {
+                        pos: position
+                    });
+                    $ionicPopup.alert({
+                        title: $translate.instant('outOfLLNTitle'),
+                        subTitle: $translate.instant('outOfLLNDialog')
+                    });
+                    centerOn(station);
+                }
+            },
+            function (reason) {
+                $rootScope.gpsActive = false;
+                handleNoGeolocation(true);
             });
-
-            var posOptions = {
-                maximumAge: Infinity,
-                timeout: 15000,
-                enableHighAccuracy: true
-            };
-
-            navigator.geolocation
-                .getCurrentPosition(function (position) {
-                    $rootScope.gpsActive = true;
-                    plotUser(L.latLng(position.coords.latitude, position.coords.longitude));
-                    $ionicLoading.hide();
-                    watchPosition();
-                    if (isInLLN([position.coords.latitude, position.coords.longitude])) {
-                        centerOn(user);
-                        $rootScope.userPosition = new L.LatLng(position.coords.latitude, position.coords.longitude);
-                        lastLocationForBearing = $rootScope.userPosition;
-                        //plotMarker("last","LAST",lastLocationForBearing,"","");
-                    } else {
-                        $ionicAnalytics.track('outOfLLN', {
-                            pos: position
-                        });
-                        $ionicPopup.alert({
-                            title: $translate.instant('outOfLLNTitle'),
-                            subTitle: $translate.instant('outOfLLNDialog')
-                        });
-                        centerOn(station);
-                    }
-                }, function (err) {
-                    $rootScope.gpsActive = false;
-                    handleNoGeolocation(true);
-                }, posOptions);
-        } else {
-            position = $rootScope.userPosition;
-
-            plotUser(position);
-            if (isInLLN(position))
-                centerOn(user);
-            else
-                centerOn(station);
-        }
-
     }
+
 
     function handleNoGeolocation(errorFlag) {
         if (errorFlag == true) {
-            $ionicPopup.alert({
-                title: $translate.instant('noGPSTitle'),
-                subTitle: $translate.instant('noGPSDialog'),
-                template: '<img style="margin: auto; text-align: center; display: block; width: 20px;" src="img/crossedIcon.png"/>'
-            });
+            if ($rootScope.gpsAlertShowed == false) {
+                $rootScope.gpsAlertShowed = true;
+                $ionicPopup.alert({
+                    title: $translate.instant('noGPSTitle'),
+                    subTitle: $translate.instant('noGPSDialog'),
+                    template: '<img style="margin: auto; text-align: center; display: block; width: 60px;" src="img/crossedIcon.png"/>'
+                });
+            }
             $ionicLoading.hide();
+            getLocation();
         } else {
             $ionicPopup.alert({
                 title: $translate.instant('gpsNotSupportedTitle'),
@@ -537,15 +545,22 @@ angular.module('LLNMaps.map', ['ionic'])
             $rootScope.routeControl.setWaypoints([user.getLatLng(), $scope.activeMarker.getLatLng()]);
             $rootScope.go = 1;
             $rootScope.goId = $rootScope.activeMarker.id;
-            centerOn(user);
-            $scope.userFocus = true;
+            fitMap();
             $rootScope.lastLocation = user.getLatLng();
         } else {
             $ionicPopup.alert({
                 title: $translate.instant('unableToGetDirectionsTitle'),
                 subTitle: $translate.instant('outOfLLNTitle')
             });
+
         }
+    }
+
+    function fitMap() {
+        $rootScope.map.fitBounds([
+            [$rootScope.userPosition.lat,$rootScope.userPosition.lng],
+            [$rootScope.activeMarker._latlng.lat,$rootScope.activeMarker._latlng.lng]
+        ]);
     }
 
     function clearWayPoints() {
@@ -615,7 +630,11 @@ angular.module('LLNMaps.map', ['ionic'])
             handleNoGeolocation(false);
         }
 
+        getMap();
+
         plotBuildings();
+
+        $rootScope.hideAllMarkers();
 
         routing.initialize();
     }
@@ -623,10 +642,6 @@ angular.module('LLNMaps.map', ['ionic'])
     function isIonicView() {
         return window.location.href.indexOf("com.ionic.viewapp") > -1;
     }
-
-
-    //Main
-    getMap();
 
     if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
         document.addEventListener("deviceready", onDeviceReady, false);
@@ -644,8 +659,8 @@ angular.module('LLNMaps.map', ['ionic'])
         go = path.split("/")[4];
         for (i in $rootScope.markers) {
             $scope.marker = $rootScope.markers[i];
-            $rootScope.activeMarker = $scope.marker;
             if (id == $scope.marker.id) {
+                $rootScope.activeMarker = $scope.marker;
                 break;
             } else {
                 $scope.marker = null;
@@ -672,6 +687,7 @@ angular.module('LLNMaps.map', ['ionic'])
             if (id != "GLOBAL" && id != "undefined") {
                 setTimeout(function () {
                     $scope.marker.openPopup();
+                    getDirectionsInformation($rootScope.activeMarker, time);
                 }, 500);
             }
         }
