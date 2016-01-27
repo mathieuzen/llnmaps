@@ -22,7 +22,6 @@
     "https://github.com/apache/cordova-plugin-splashscreen.git",
     "com.ludei.ios.webview.plus",
     "cordova-plugin-whitelist",
-    "cordova-plugin-splashscreen",
     "https://git-wip-us.apache.org/repos/asf/cordova-plugin-geolocation.git",
     "https://git-wip-us.apache.org/repos/asf/cordova-plugin-inappbrowser.git",
     {
@@ -32,7 +31,12 @@
     "https://github.com/EddyVerbruggen/Insomnia-PhoneGap-Plugin.git",
     "git://github.com/zoxxx/PhoneGap-KeepScreenOn-plugin.git",
     "https://git-wip-us.apache.org/repos/asf/cordova-plugin-globalization.git",
-    "cordova-plugin-crosswalk-webview"
+    {
+      "locator": "https://github.com/apache/cordova-plugin-splashscreen.git",
+      "id": "cordova-plugin-splashscreen"
+    },
+    "cordova-plugin-crosswalk-webview",
+    "cordova-plugin-splashscreen"
   ],
   "cordovaPlatforms": [
     "ios",

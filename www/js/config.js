@@ -1,5 +1,5 @@
     
-    var version = "beta 0.1.4";
+    var version = "beta 0.1.5";
 
     //bounds to map
     var northWestBound = [50.687210, 4.580998];

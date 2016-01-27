@@ -1,6 +1,6 @@
 var app = angular.module('LLNMaps', ['ngCordova', 'ionic', 'ionic.service.core', 'ionic.service.analytics', 'LLNMaps.map', 'LLNMaps.compass', 'LLNMaps.content', 'LLNMaps.tabs', 'LLNMaps.search', 'LLNMaps.modals', 'LLNMaps.delete', 'pascalprecht.translate'])
 
-.run(function ($ionicPlatform, $translate, $ionicAnalytics, $rootScope) {
+.run(function ($ionicPlatform, $translate, $ionicAnalytics, $rootScope, $timeout) {
     $ionicPlatform.ready(function () {
         $rootScope.activeLanguage = "EN";
         $ionicAnalytics.register({
@@ -17,11 +17,8 @@ var app = angular.module('LLNMaps', ['ngCordova', 'ionic', 'ionic.service.core',
             // org.apache.cordova.statusbar required
             StatusBar.styleDefault();
         }
-        if (navigator.splashscreen) {
-            navigator.splashscreen.hide();
-        }
 
-        if (md.tablet() && md.phone()) {
+        if (md.tablet() || md.phone()) {
             if (md.tablet() != null) {
                 screen.lockOrientation("landscape");
             } else {

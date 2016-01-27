@@ -1,6 +1,6 @@
 angular.module('LLNMaps.map', ['ionic'])
 
-.controller('MapCtrl', function ($scope, $http, $rootScope, $stateParams, $location, $ionicLoading, $ionicPopup, $ionicPlatform, $ionicActionSheet, $cordovaDeviceOrientation, $timeout, $ionicModal, compute, routing, geolocation, $translate, $ionicAnalytics) {
+.controller('MapCtrl', function ($scope, $http, $rootScope, $stateParams, $location, $ionicLoading, $ionicPopup, $ionicPlatform, $ionicActionSheet, $cordovaDeviceOrientation, $timeout, $ionicModal, compute, routing, geolocation, $translate, $ionicAnalytics, $cordovaSplashscreen) {
 
     //markers for buildings
     $rootScope.markers = new Array();
@@ -77,7 +77,10 @@ angular.module('LLNMaps.map', ['ionic'])
         $rootScope.map = L.map('map', {
             zoomControl: false,
             //hide attributions to prevent not intent event
-            attributionControl: false
+            attributionControl: false,
+            fadeAnimation: true,
+            zoomAnimation: true,
+            markerZoomAnimation: true
         }).setView(station.getLatLng(), 14);
 
         L.tileLayer('img/tiles/{z}/{x}/{y}.jpg', {
@@ -116,10 +119,12 @@ angular.module('LLNMaps.map', ['ionic'])
         });
 
         $rootScope.map.on('zoomend', function (e) {
-            if ($rootScope.map.getZoom() <= 14) {
-                $rootScope.hideAllMarkers();
-            } else {
-                $rootScope.showAllMarkers();
+            if (!$rootScope.directionsServiceActive) {
+                if ($rootScope.map.getZoom() <= 14) {
+                    $rootScope.hideAllMarkers();
+                } else {
+                    $rootScope.showAllMarkers();
+                }
             }
             for (label in $scope.labels) {
                 if ($rootScope.map.getZoom() < 14)
@@ -135,6 +140,14 @@ angular.module('LLNMaps.map', ['ionic'])
         $rootScope.map.addLayer($rootScope.polyline);
 
         $scope.plotArea();
+
+        $rootScope.map.whenReady(function () {
+            if (navigator.splashscreen) {
+                $timeout(function () {
+                    navigator.splashscreen.hide();
+                }, 2000);
+            }
+        });
     }
 
     $rootScope.pinClick = function () {
@@ -174,11 +187,13 @@ angular.module('LLNMaps.map', ['ionic'])
         $rootScope.polyline.setLatLngs([]);
         $rootScope.map.addLayer($rootScope.polyline);
 
+        $scope.plotArea();
+
         $rootScope.go = 0;
         $rootScope.id = "GLOBAL";
         location = "#/tab/map/";
     }
-    
+
     $rootScope.newPin = function (pos) {
         if (pos == undefined) {
             pos = $rootScope.userPosition;
@@ -231,6 +246,7 @@ angular.module('LLNMaps.map', ['ionic'])
         button.innerHTML = "Go";
         button.onclick = function () {
             $scope.marker.closePopup();
+            $rootScope.hideAllMarkers();
             getDirections($scope.marker);
         }
 
@@ -330,15 +346,30 @@ angular.module('LLNMaps.map', ['ionic'])
                 color: area.color,
                 stroke: false,
                 fillOpacity: 0.1,
-                clickable: false
+                clickable: true
             });
-            label = new L.Label();
+            areaPolygon.on("click", function (e) {
+                abstractPolygon = new L.polygon(this._latlngs);
+                if ($rootScope.map.getZoom() <= 15) {
+                    $rootScope.map.setView(abstractPolygon.getBounds().getCenter(), 15);
+                }
+            });
+            label = new L.Label({
+                clickable: true,
+                noHide: true
+            });
+            label.area = areaPolygon;
+            label.on("click", function (e) {
+                this.area.fireEvent("click");
+            });
             label.setContent(area.id);
             label.setLatLng(areaPolygon.getBounds().getCenter());
             $rootScope.map.addLayer(areaPolygon);
-            $rootScope.map.showLabel(label);
-            label.setOpacity(0.7);
-            $scope.labels.push(label);
+            if ($scope.labels.length < 5) {
+                $rootScope.map.showLabel(label);
+                label.setOpacity(0.7);
+                $scope.labels.push(label);
+            }
         }
     }
 
@@ -516,11 +547,13 @@ angular.module('LLNMaps.map', ['ionic'])
     var categories = ["audit", "customPins", "entertainment", "inforville", "shops", /* "places24",*/ "transport"];
 
     $rootScope.showAllMarkers = function () {
-        $rootScope.markersHidden = false;
+        if ($rootScope.markersHidden)
+            $rootScope.markersHidden = false;
     };
 
     $rootScope.hideAllMarkers = function () {
-        $rootScope.markersHidden = true;
+        if (!$rootScope.markersHidden)
+            $rootScope.markersHidden = true;
     };
 
 
@@ -558,8 +591,8 @@ angular.module('LLNMaps.map', ['ionic'])
 
     function fitMap() {
         $rootScope.map.fitBounds([
-            [$rootScope.userPosition.lat,$rootScope.userPosition.lng],
-            [$rootScope.activeMarker._latlng.lat,$rootScope.activeMarker._latlng.lng]
+            [$rootScope.userPosition.lat, $rootScope.userPosition.lng],
+            [$rootScope.activeMarker._latlng.lat, $rootScope.activeMarker._latlng.lng]
         ]);
     }
 
