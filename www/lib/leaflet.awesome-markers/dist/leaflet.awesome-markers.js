@@ -21,7 +21,7 @@
     L.AwesomeMarkers.Icon = L.Icon.extend({
         options: {
             iconSize: [35, 45],
-            iconAnchor:   [17, 42],
+            iconAnchor: [17, 42],
             popupAnchor: [1, -32],
             shadowAnchor: [10, 12],
             shadowSize: [36, 16],
@@ -31,7 +31,8 @@
             extraClasses: '',
             icon: 'home',
             markerColor: 'blue',
-            iconColor: 'white'
+            iconColor: 'white',
+            html: ""
         },
 
         initialize: function (options) {
@@ -55,28 +56,34 @@
             return div;
         },
 
-        _createInner: function() {
-            var iconClass, iconSpinClass = "", iconColorClass = "", iconColorStyle = "", options = this.options;
+        _createInner: function () {
+            var iconClass, iconSpinClass = "",
+                iconColorClass = "",
+                iconColorStyle = "",
+                options = this.options;
 
-            if(options.icon.slice(0,options.prefix.length+1) === options.prefix + "-") {
+            if (options.icon.slice(0, options.prefix.length + 1) === options.prefix + "-") {
                 iconClass = options.icon;
             } else {
                 iconClass = options.prefix + "-" + options.icon;
             }
 
-            if(options.spin && typeof options.spinClass === "string") {
+            if (options.spin && typeof options.spinClass === "string") {
                 iconSpinClass = options.spinClass;
             }
 
-            if(options.iconColor) {
-                if(options.iconColor === 'white' || options.iconColor === 'black') {
+            if (options.iconColor) {
+                if (options.iconColor === 'white' || options.iconColor === 'black') {
                     iconColorClass = "icon-" + options.iconColor;
                 } else {
                     iconColorStyle = "style='color: " + options.iconColor + "' ";
                 }
             }
+            if(options.html !== ""){
+                return "<i style='color: white; font-size: 13px; font-weight: bold;'>"+options.html+"</i>";
+            }
 
-            return "<i " + iconColorStyle + "class='" + options.extraClasses + " " + options.prefix + " " + iconClass + " " + iconSpinClass + " " + iconColorClass + "'></i>";
+            return "<i " + iconColorStyle + "class='" + options.extraClasses + " " + options.prefix + " " + iconClass + " " + iconSpinClass + " " + iconColorClass + "'>" + options.html + "</i>";
         },
 
         _setIconStyles: function (img, name) {
@@ -98,11 +105,11 @@
 
             if (anchor) {
                 img.style.marginLeft = (-anchor.x) + 'px';
-                img.style.marginTop  = (-anchor.y) + 'px';
+                img.style.marginTop = (-anchor.y) + 'px';
             }
 
             if (size) {
-                img.style.width  = size.x + 'px';
+                img.style.width = size.x + 'px';
                 img.style.height = size.y + 'px';
             }
         },
@@ -112,14 +119,11 @@
 
             this._setIconStyles(div, 'shadow');
             return div;
-      }
+        }
     });
-        
+
     L.AwesomeMarkers.icon = function (options) {
         return new L.AwesomeMarkers.Icon(options);
     };
 
 }(this, document));
-
-
-

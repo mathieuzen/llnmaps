@@ -136,7 +136,7 @@ angular.module('LLNMaps.map', ['ionic'])
                 $rootScope.map.fireEvent('click');
             }, 50, true);
         });
-
+        
         $rootScope.map.addLayer($rootScope.polyline);
 
         $scope.plotArea();

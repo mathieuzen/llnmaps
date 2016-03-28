@@ -686,4 +686,6 @@ color: white;
 .custom-popup .leaflet-popup-tip {
 
   }
-
+.awesome-marker{
+    transition: all 1s;    
+}
