@@ -1,3 +1,7 @@
+.leaflet-popup-content p {
+    margin: 8px 0 !important;
+}
+
 #map {
     top: 0px;
     width: 100%;

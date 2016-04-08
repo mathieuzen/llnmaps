@@ -136,16 +136,20 @@ angular.module('LLNMaps.map', ['ionic'])
                 $rootScope.map.fireEvent('click');
             }, 50, true);
         });
-        
+
         $rootScope.map.addLayer($rootScope.polyline);
 
         $scope.plotArea();
 
         $rootScope.map.whenReady(function () {
+            $ionicPopup.alert({
+     title: navigator.splashscreen,
+     template: navigator.splashscreen
+   });
             if (navigator.splashscreen) {
                 $timeout(function () {
                     navigator.splashscreen.hide();
-                }, 2000);
+                }, 10000);
             }
         });
     }
@@ -297,7 +301,7 @@ angular.module('LLNMaps.map', ['ionic'])
 
         var popup = new L.popup({
             className: "custom-popup popup-" + type,
-            keepInView: true
+            keepInView: false
         });
         popup.setContent(div);
 
@@ -656,6 +660,13 @@ angular.module('LLNMaps.map', ['ionic'])
                 window.plugins.insomnia.keepAwake();
         }
 
+        if (ionic.Platform.isIOS()) {
+            var style = document.createElement('style');
+            style.type = 'text/css';
+            style.innerHTML = '.leaflet-popup-content-wrapper{ -webkit-transform: scale(0.9,0.9) translateY(20px);  } .custom-popup .leaflet-popup-close-button {-webkit-transform: scale(0.9,0.9) translateY(32px) translateX(-10px); z-index:99; }';
+            document.getElementsByTagName('head')[0].appendChild(style)
+        }
+
         if (navigator.geolocation) {
             getLocation();
         } else {
@@ -676,7 +687,7 @@ angular.module('LLNMaps.map', ['ionic'])
         return window.location.href.indexOf("com.ionic.viewapp") > -1;
     }
 
-    if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
+    if (navigator.userAgent.match(/(Android|BlackBerry)/)) {
         document.addEventListener("deviceready", onDeviceReady, false);
     } else {
         onDeviceReady();

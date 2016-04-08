@@ -7,6 +7,12 @@ var app = angular.module('LLNMaps', ['ngCordova', 'ionic', 'ionic.service.core',
             //comment this in order to get analytics
             dryRun: true
         });
+        
+        if(ionicPlatform.isIOS()){
+             setTimeout(function() {
+        navigator.splashscreen.hide();
+    }, 4000);   
+        }
         var md = new MobileDetect(window.navigator.userAgent);
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
@@ -36,6 +42,7 @@ var app = angular.module('LLNMaps', ['ngCordova', 'ionic', 'ionic.service.core',
                 }, function (error) {});
             }, null);
         }
+        
     });
 })
 
