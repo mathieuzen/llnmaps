@@ -27,6 +27,7 @@ angular.module('LLNMaps.map', ['ionic'])
 
     //focus on user
     $scope.userFocus = false;
+    $scope.areasHidden;
 
     $rootScope.polyline = L.polyline([], {
         color: 'green',
@@ -122,12 +123,23 @@ angular.module('LLNMaps.map', ['ionic'])
             if (!$rootScope.directionsServiceActive) {
                 if ($rootScope.map.getZoom() <= 14) {
                     $rootScope.hideAllMarkers();
+                    $rootScope.showAreas();
                 } else {
                     $rootScope.showAllMarkers();
+                    $rootScope.hideAreas();
                 }
             }
+            if (!$rootScope.directionsServiceActive) {
+                if ($rootScope.map.getZoom() <= 16) {
+                    $rootScope.showAreas();
+                } else {
+                    $rootScope.hideAreas();
+                }
+            }
+
+
             for (label in $scope.labels) {
-                if ($rootScope.map.getZoom() < 14)
+                if ($rootScope.map.getZoom() < 14 || $rootScope.map.getZoom() >= 16)
                     $scope.map.removeLayer($scope.labels[label]);
                 else
                     $scope.map.addLayer($scope.labels[label]);
@@ -137,15 +149,25 @@ angular.module('LLNMaps.map', ['ionic'])
             }, 50, true);
         });
 
+        $rootScope.hideAreas = function () {
+            $rootScope.map.eachLayer(function (layer) {
+                if (layer.options.type === "area") {
+                    $rootScope.map.removeLayer(layer);
+                    $scope.areasHidden = true;
+                }
+            });
+        }
+
+        $rootScope.showAreas = function () {
+            if ($scope.areasHidden)
+                $scope.plotArea();
+        }
+
         $rootScope.map.addLayer($rootScope.polyline);
 
         $scope.plotArea();
 
         $rootScope.map.whenReady(function () {
-            $ionicPopup.alert({
-     title: navigator.splashscreen,
-     template: navigator.splashscreen
-   });
             if (navigator.splashscreen) {
                 $timeout(function () {
                     navigator.splashscreen.hide();
@@ -350,7 +372,8 @@ angular.module('LLNMaps.map', ['ionic'])
                 color: area.color,
                 stroke: false,
                 fillOpacity: 0.1,
-                clickable: true
+                clickable: true,
+                type: "area"
             });
             areaPolygon.on("click", function (e) {
                 abstractPolygon = new L.polygon(this._latlngs);
@@ -375,6 +398,7 @@ angular.module('LLNMaps.map', ['ionic'])
                 $scope.labels.push(label);
             }
         }
+        $scope.areasHidden = false;
     }
 
     function centerOn(marker) {
